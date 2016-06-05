@@ -9,17 +9,11 @@ The overhead of loading the other plugins will slow the answer down. For autocom
 
 This plugin should be put in the mu-plugins folder within wp-content (maybe you need to create the folder). MU-Plugins are loaded before all the other plugins.
 
-This plugin is intented to be used by developers. There is no GUI. See the example code in the plugin file how to use it. 
+This plugin is intended to be used by developers. There is no GUI. See the example code in the plugin file on how to use it. 
 
-You need to find out which action the AJAX call is using. 
+If the called ajax handler is registered in a plugin, this plugin is automatically loaded while the theme `functions.php` is not loaded. If it's in a theme, no plugins are loaded at all. 
 
-Learn how plugins use the admin-ajax.php (http://solislab.com/blog/5-tips-for-using-ajax-in-wordpress/)
+If the ajax call is depending on a plugin that is not the handler of the call, this plugin must be passed as 'active' manually, check the `option_active_plugins` filter for examples.
 
-Get to know the action by looking in the plugin code: 
-```PHP
-add_action( 'wp_ajax_nopriv_{THE_ACTION}', 'myajax_submit' ); // not logged in
-add_action( 'wp_ajax_{THE_ACTION}', 'myajax_submit' );        // logged in
-```
-
-Or check our browsers developer tool for XHR requests and the the action of the request you want to speed up. 
-
+## Caveats
+* all plugins that hold ajax handlers are exposed in the front end
