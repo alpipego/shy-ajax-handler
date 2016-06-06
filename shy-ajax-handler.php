@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Shy Ajax Handler
-Plugin URI: https://sebastian-gaertner.com
+Plugin URI: https://github.com/alpipego/shy-ajax-handler/
 Description: Only load necessary plugins for ajax responses
 Version: 0.2.0
 Author: Sebastian Gärtner
@@ -40,6 +40,7 @@ if ( ! defined( 'DOING_AJAX' ) || ! DOING_AJAX || ! isset( $_REQUEST['action'] )
 			require_once ABSPATH . 'wp-admin/includes/plugin.php';
 		}
 
+		$file = realpath($file);
 		// taken from http://wordpress.stackexchange.com/a/124605/48863
 		$plugin_dir  = @explode( '/', plugin_basename( $file ) )[0];
 		$plugin_file = @array_keys( get_plugins( "/$plugin_dir" ) )[0];
@@ -48,7 +49,7 @@ if ( ! defined( 'DOING_AJAX' ) || ! DOING_AJAX || ! isset( $_REQUEST['action'] )
 		if ( isset( $plugin_dir ) && isset( $plugin_file ) ) {
 			$return = $plugin_dir . '/' . $plugin_file;
 			// if it's from a theme return theme
-		} elseif (strpos($file, get_template_directory()) === 0) {
+		} elseif (strpos($file, realpath(get_template_directory())) === 0 || strpos($file, realpath(get_stylesheet_directory())) === 0) {
 			$return = 'theme';
 			// else return false
 		} else {
@@ -97,12 +98,9 @@ if ( ! defined( 'DOING_AJAX' ) || ! DOING_AJAX || ! isset( $_REQUEST['action'] )
 		//     $plugins[] = 'plugin/plugin.php';
 		// }
 
-		if ($_REQUEST['handler'] !== 'theme') {
+		if (isset($_REQUEST['handler']) && $_REQUEST['handler'] && $_REQUEST['handler'] !== 'theme') {
 			// activate the plugin with the ajax handler
 			$plugins[] = $_REQUEST['handler'];
-			// don't load the theme
-			define('TEMPLATEPATH', '');
-			define('STYLESHEETPATH', '');
 		}
 
 		return $plugins;
