@@ -61,7 +61,10 @@ if ( ! defined( 'DOING_AJAX' ) || ! DOING_AJAX || ! isset( $_REQUEST['action'] )
 
 	// if this is not an ajax call enqueue js
 	// get all registered ajax handlers and pass them to js
-	add_action( 'wp_enqueue_scripts', function () {
+	add_action( 'wp_enqueue_scripts', 'collect_ajax_actions');
+	add_action( 'admin_enqueue_scripts', 'collect_ajax_actions');
+
+	function collect_ajax_actions() {
 		// get all attached ajax handlers
 		global $wp_filter;
 		$collector = [ ];
@@ -84,7 +87,7 @@ if ( ! defined( 'DOING_AJAX' ) || ! DOING_AJAX || ! isset( $_REQUEST['action'] )
 			'collection' => json_encode( $collector ),
 			'loggedin' => is_user_logged_in(),
 		] );
-	} );
+	}
 } else {
 	add_filter( 'option_active_plugins', function() {
 		$plugins = [];
@@ -94,7 +97,7 @@ if ( ! defined( 'DOING_AJAX' ) || ! DOING_AJAX || ! isset( $_REQUEST['action'] )
 		//     $plugins[] = 'parent-plugin/parent-plugin.php';
 		// }
 		// or base it on the action, e.g. this call from my theme depends on a specific plugin
-		// if ( $_REQUEST['action'] === 'wp_ajax_my_theme_handler') {
+		// if ( $_REQUEST['action'] === 'my_theme_handler') {
 		//     $plugins[] = 'plugin/plugin.php';
 		// }
 
