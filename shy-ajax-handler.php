@@ -3,10 +3,10 @@
 Plugin Name: Shy Ajax Handler
 Plugin URI: https://github.com/alpipego/shy-ajax-handler/
 Description: Only load necessary plugins for ajax responses
-Version: 0.2.0
+Version: 0.3.0
 Author: Sebastian Gärtner
 Author URI: https://sebastian-gaertner.com
-Co-Author: Alexander Goller
+Contributor: Alexander Goller
 License: GPLv2
 */
 
